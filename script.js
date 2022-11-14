@@ -1,8 +1,3 @@
-//<script src="color-checker.js" charset="utf-8"></script> /*importo la API de validacion de contraste.*/
-console.log("------------")
-//console.log(checkColors("ffffff", "000000"));
-console.log("------------")
-
 /* creo las variables de opcione q van a ir variando cuando se clikee el valor correcto.*/
 let option1; 
 let option2;
@@ -40,37 +35,78 @@ function mezclarArr(Arr){
     newArr.push(Arr[index])
   } return newArr
 }
-/*creo la funcion para crear un color random*/
-function randomColor() {
-	const HexRed = Math.floor(Math.random() * 256).toString(16);
-	const HexGreen = Math.floor(Math.random() * 256).toString(16);
-	const HexBlue = Math.floor(Math.random() * 256).toString(16);
-	console.log('#'+HexRed+HexGreen+HexBlue)
-	return '#'+HexRed+HexGreen+HexBlue
-	
+
+
+/*Creo una funcion que calcule la luminance de un color.*/
+
+function luminance(r, g, b) {
+	const a = [r, g, b].map(function (v) {
+		v /= 255;
+		return v <= 0.03928
+			? v / 12.92
+			: Math.pow( (v + 0.055) / 1.055, 2.4 );
+	});
+	return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
+}
+/* creo una funcion que me de el contraste entre 2 colores, los colores tienen que ser pasado como un vector del sistema rgb*/
+function contrastRatio(color1,color2){
+	const L1 = luminance(color1[0], color1[1], color1[2])
+	const L2 = luminance(color2[0], color2[1], color2[2])
+	return L1 >= L2 ? ((L1+0.05)/(L2+0.05)) : ((L2+0.05)/(L1+0.05))
+}
+
+
+/*creo una funcion que me pase un vector de los valores de un color en RGB y que me lo pase la notacion rgb tengo q asignar en css.*/
+function rgbNotation([r,g,b]) {
+	return 'rgb('+r+','+g+','+b+')'
+}
+
+
+
+function randomColorsWithHightContrast(){
+	let CR = 0
+	while (true) {
+		const color1 = [256,256,256].map(function(x){return Math.floor(Math.random()*x)})
+		const color2 = [256,256,256].map(function(x){return Math.floor(Math.random()*x)})
+		CR = contrastRatio(color1,color2)
+		if (CR >= 7.5) {
+			c1 = rgbNotation(color1)
+			c2 = rgbNotation(color2)
+			return [c1,c2]
+		}
+	}
 }
 
 /*creo la funcion para cargar las opciones mezcladas*/
 function cargarOpciones(){
+	let colorsOp1;
+	let colorsOp2;
+	let colorsOp3;
+	let colorsOp4;
+
 	option1 = document.querySelector(".op1")
 	option1.textContent = arrOptions[0]
-	option1.style.background = randomColor()
-	option1.style.color = randomColor()
+	colorsOp1 = randomColorsWithHightContrast()
+	option1.style.background = colorsOp1[0]
+	option1.style.color = colorsOp1[1]
 
 	option2 = document.querySelector(".op2")
 	option2.textContent = arrOptions[1]
-	option2.style.background = randomColor()
-	option2.style.color = randomColor()
+	colorsOp2 = randomColorsWithHightContrast()
+	option2.style.background = colorsOp2[0]
+	option2.style.color = colorsOp2[1]
 
 	option3 = document.querySelector(".op3")
 	option3.textContent = arrOptions[2]
-	option3.style.background = randomColor()
-	option3.style.color = randomColor()
+	colorsOp3 = randomColorsWithHightContrast()
+	option3.style.background = colorsOp3[0]
+	option3.style.color = colorsOp3[1]
 
 	option4 = document.querySelector(".op4")
 	option4.textContent = arrOptions[3]
-	option4.style.background = randomColor()
-	option4.style.color = randomColor()
+	colorsOp4 = randomColorsWithHightContrast()
+	option4.style.background = colorsOp4[0]
+	option4.style.color = colorsOp4[1]
 }
 
 	
