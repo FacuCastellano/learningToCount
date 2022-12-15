@@ -1,4 +1,5 @@
 /* creo las variables de opcione q van a ir variando cuando se clikee el valor correcto.*/
+
 let option1; 
 let option2;
 let option3;
@@ -11,16 +12,21 @@ let arrOptions = [proxNumero];
 /*creo una funcion para que me de un numero entre cierto rango(max and min, ambos estan incluidos), sin repetir los numeros que ya salieron */
 function getNewRandonNumber(min,max,previousNumbers) {
   while (true) {  
-    let num = Math.floor(Math.random()*(max-min+1) + min);
-      if (!(previousNumbers.includes(num))) {
-				return num
+    let num = Math.floor(Math.random()*(max+1-min) + min); /*agrego el +1 para incluir al numero max del rango*/
+	if (!(previousNumbers.includes(num))) {
+		return num
     }
   }
 }
 /*Creo los numeros opcionales a elegir, siempre queda el numero correcto primero, por lo que tengo que mezclar el array*/
-function crearOpciones(){
+function crearOpciones(ultimoNumeroStr){
 	for (let i = 0; i <= 2; i++) {
-		let optNum = getNewRandonNumber(ultimoNumeroStr-5,ultimoNumeroStr+5,arrOptions);
+		let optNum
+		if (ultimoNumeroStr <= 5) {
+			optNum= getNewRandonNumber(0,ultimoNumeroStr+5,arrOptions);
+		} else {
+			optNum= getNewRandonNumber(ultimoNumeroStr-5,ultimoNumeroStr+5,arrOptions);
+		}
 		arrOptions.push(optNum)
 	}
 }
@@ -61,15 +67,13 @@ function rgbNotation([r,g,b]) {
 	return 'rgb('+r+','+g+','+b+')'
 }
 
-
-
 function randomColorsWithHightContrast(){
 	let CR = 0
 	while (true) {
 		const color1 = [256,256,256].map(function(x){return Math.floor(Math.random()*x)})
 		const color2 = [256,256,256].map(function(x){return Math.floor(Math.random()*x)})
 		CR = contrastRatio(color1,color2)
-		if (CR >= 7.5) {
+		if (CR >= 5) {
 			c1 = rgbNotation(color1)
 			c2 = rgbNotation(color2)
 			return [c1,c2]
@@ -109,12 +113,8 @@ function cargarOpciones(){
 	option4.style.color = colorsOp4[1]
 }
 
-	
-
-
-
 /*creo las opciones la primera vez*/ 
-crearOpciones()
+crearOpciones(ultimoNumeroStr)
 
 /*mezclo el arreglo con las opciones de numeros, para que no se siempre el primer numero el correcto.*/ 
 arrOptions = mezclarArr(arrOptions)
@@ -123,12 +123,20 @@ cargarOpciones()
 
 /*Ahora tengo que agregar la ultimo numero a la lista.*/
 /*primero defino la funcion y despues se la agrego a los elementos que corresponde.*/ 
-const textMot = document.getElementById('text-container') /*cuando lo obtengo por ID si tengo el elemento, no un array, por eso lo uso directamente.*/
+const textThumb = document.getElementById('text-container') /*cuando lo obtengo por ID si tengo el elemento, no un array, por eso lo uso directamente.*/
+
+function cargarImg(pathImg){
+	textThumb.setAttribute('id', 'thumb-container');
+	const path = "url('"+pathImg+"')"
+	console.log(path)
+	textThumb.style.backgroundImage = path
+}
 
 function elementoClikeado(event) {
 	const numClicked=Number(event.target.textContent)
+	
 	if(numClicked === proxNumero){
-		console.log("correcto")
+
 		const numAgregar = event.target.cloneNode()
 		numAgregar.setAttribute("class", "block")
 		numAgregar.textContent = proxNumero.toString()
@@ -137,18 +145,16 @@ function elementoClikeado(event) {
 		ultimoNumeroStr = Number(document.body.firstElementChild.lastElementChild.textContent);
 		proxNumero = ultimoNumeroStr + 1;
 		arrOptions = [proxNumero];
-		crearOpciones()
+		crearOpciones(ultimoNumeroStr)
 		arrOptions = mezclarArr(arrOptions)
 		cargarOpciones()
-		textMot.textContent = "Muy Bien! Sigue así!"
+		textThumb.textContent = ""
+		cargarImg("images/thumbUp.png")
 	}else {
-		textMot.textContent = "Uups!  Probemos de nuevo."
+		textThumb.textContent = ""
+		cargarImg("images/thumbDown.png")
 	}
-
-
 }
-	 
-
 
 optionList = document.querySelectorAll('.option')
 

@@ -8,7 +8,7 @@
 
 body{
   background: linear-gradient(-45deg, white, pink);
-  border:solid 4px red;
+  /*border:solid 4px red;*/
   display: grid;
   grid-template-columns: 7fr 3fr;
   grid-template-rows: 1fr;
@@ -19,9 +19,9 @@ body{
 .container  {
   /*background-color: white;*/
   margin: 50px auto;
-  height: auto;
+  height: min(auto,190px);
   width: 516px;
-  border: solid 3px blue;
+  /*border: solid 3px blue;*/
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -32,7 +32,7 @@ body{
   margin: 50px auto;
   height: auto;
   width: 360px;
-  border: solid 3px blue;
+  /*border: solid 3px blue;*/
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -46,18 +46,34 @@ body{
   height: 200px;
   font-size: 50px;
   font-family: 'Times New Roman', Times, serif;
-  border: solid 3px green;
+  /*border: solid 3px green;*/
   display:flex;
   align-items: center;
   justify-content: center;
+  border-radius: 30px;
 }
+
+#thumb-container{
+  border-radius: 20;
+  width: 100%;
+  height: 200px;
+  background-size: 200px 191px;
+  background-repeat: no-repeat;
+  background-position: center; 
+  /*border: solid 3px green;*/
+  
+  
+}
+
+
+
 .optionsContainer{
   /*background-color: white;*/
   margin: auto auto;
   margin-bottom: 100px;
   height: auto;
   width: 100%;
-  border: solid 3px red;
+  /*border: solid 3px red;*/
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
